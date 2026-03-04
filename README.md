@@ -1,6 +1,6 @@
 # random 🌸🐱
 
-A visual novel about a catgirl in a city full of sakura.
+An anime visual novel about an anime catgirl in a city full of sakura.
 
 ## Run
 1. Open Ren'Py Launcher

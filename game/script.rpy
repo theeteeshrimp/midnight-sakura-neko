@@ -9,11 +9,11 @@ label start:
     with fade
 
     n "A city of sakura, neon, and midnight trains."
-    n "You miss your stop—and meet a catgirl on a quiet platform."
+    n "You miss your stop—and meet an anime catgirl on a quiet platform."
 
     y "You're new here, huh?"
     p "Is it that obvious?"
-    y "Only to me. I'm Yuna."
+    y "Only to me. I'm Yuna, a stray anime catgirl who knows every sakura alley in this city."
 
     menu:
         "How do you respond?"
