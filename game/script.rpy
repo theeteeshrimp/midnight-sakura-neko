@@ -265,6 +265,144 @@ label chapter_2_merge:
         n "Route lock-in trend: Truth-first path."
 
     n "[Next: Chapter 3 — Missed Meeting / Trust Fracture]"
+    jump chapter_3_trust_fracture
+
+label chapter_3_trust_fracture:
+    $ chapter = 3
+    scene black
+    with fade
+
+    n "Rain starts early. Your phone lights up with one message from Yuna:"
+    n "'Clocktower. 11:40. Don't be late.'"
+
+    if route_flag == "romance":
+        n "After Sakura Alley, this feels less like an invitation and more like a promise."
+    elif route_flag == "mystery":
+        n "After Lantern District, this feels like a test."
+
+    menu:
+        "How do you handle the meeting?"
+
+        "Go immediately, no excuses":
+            $ affinity += 2
+            $ courage += 1
+            p "On my way."
+            call add_journal("I prioritized Yuna and went to the meeting immediately.")
+            jump chapter_3_on_time
+
+        "Finish one task first, then go":
+            $ honesty += 1
+            $ courage += 1
+            p "Give me twenty minutes. I'll still come."
+            call add_journal("I delayed honestly, hoping not to be too late.")
+            jump chapter_3_late
+
+        "Ignore the message":
+            $ affinity -= 2
+            $ honesty -= 1
+            p "..."
+            call add_journal("I ignored Yuna's message and avoided the meeting.")
+            jump chapter_3_missed
+
+label chapter_3_on_time:
+    scene black
+    with dissolve
+
+    n "You arrive before the bell chimes. Yuna is already there, tail flicking in the rain."
+    y "Whoa. You actually came first."
+
+    if myth_clue >= 3:
+        y "Then hear this: the Neko Hour appears when people stand where they once ran."
+        $ myth_clue += 1
+        call add_journal("Yuna revealed a key Neko Hour condition: choosing to stay.")
+
+    menu:
+        "How do you answer her?"
+
+        "I don't want to keep running":
+            $ honesty += 2
+            $ affinity += 1
+            p "I keep pretending timing decides everything. It doesn't. I do."
+            y "...good."
+            call add_journal("I admitted my pattern of running from closeness.")
+
+        "I came for answers":
+            $ myth_clue += 1
+            p "Tell me what you are to this city."
+            y "Maybe ask who you are to yourself first."
+            call add_journal("I pushed the myth question even in a vulnerable moment.")
+
+    jump chapter_3_resolve
+
+label chapter_3_late:
+    scene black
+    with dissolve
+
+    n "You arrive as the clock hits 12:03. The bench is empty."
+    n "A paper charm waits in her place."
+
+    if route_flag == "romance":
+        n "The charm reads: 'I wanted to trust tonight.'"
+        $ affinity -= 1
+    else:
+        n "The charm reads: 'Truth waits for no one.'"
+        $ myth_clue += 1
+
+    menu:
+        "What now?"
+
+        "Call Yuna and apologize directly":
+            $ honesty += 2
+            $ courage += 1
+            p "I messed up. Not because of work—because I hesitated."
+            call add_journal("I apologized directly after arriving late.")
+
+        "Rationalize the delay":
+            $ honesty -= 1
+            p "Any reasonable person would understand."
+            call add_journal("I defended myself instead of taking accountability.")
+
+    jump chapter_3_resolve
+
+label chapter_3_missed:
+    scene black
+    with dissolve
+
+    n "You don't go."
+    n "At 2:11 AM, Akari sends one line: 'She waited anyway.'"
+
+    $ courage -= 1
+    $ affinity -= 1
+
+    menu:
+        "How do you respond to the guilt?"
+
+        "Admit the truth in your journal":
+            $ honesty += 1
+            p "I wasn't busy. I was afraid of being seen."
+            call add_journal("I admitted fear was the real reason I missed the meeting.")
+
+        "Blame circumstances":
+            $ honesty -= 1
+            p "Timing was impossible tonight."
+            call add_journal("I blamed timing instead of my own avoidance.")
+
+    jump chapter_3_resolve
+
+label chapter_3_resolve:
+    scene black
+    with fade
+
+    n "Chapter 3 Complete."
+
+    if affinity >= 4 and honesty >= 3:
+        n "Trust remains fragile, but alive."
+    elif myth_clue >= 4:
+        n "You are closer to the city's truth than to your own."
+    else:
+        n "Distance is now a habit, not an accident."
+
+    n "[Next: Chapter 4 — Festival Night Decision]"
     jump codex_preview
 
 label codex_preview:
