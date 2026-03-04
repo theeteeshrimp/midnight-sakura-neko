@@ -476,8 +476,117 @@ label chapter_4_resolve:
     else:
         n "Ending trajectory unlocked: Moonlit Distance (Drift risk)."
 
-    n "[Next: Chapter 5 — Dawn Resolution]"
-    jump codex_preview
+    n "[Next: Final Chapter — The First Train Home]"
+    jump chapter_5_first_train_home
+
+label chapter_5_first_train_home:
+    $ chapter = 5
+    scene black
+    with fade
+
+    n "[Final Chapter: The First Train Home]"
+    n "Dawn thins the night. Festival lights fade."
+    n "At Shiun Station, the first train hums in the distance."
+
+    if festival_outcome == "heart":
+        jump ending_soft_dawn
+    elif festival_outcome == "mind":
+        jump ending_clocktower_truth
+    else:
+        jump ending_moonlit_distance
+
+label ending_soft_dawn:
+    scene black
+    with dissolve
+
+    n "Yuna waits by the platform edge, no teasing smile this time."
+    y "You really came."
+    p "I said I'd stop being accidental."
+
+    if honesty >= 4:
+        p "I don't just want midnight versions of us. I want all of it."
+        y "...then don't vanish at sunrise."
+    else:
+        p "I don't have perfect words. Just this choice."
+        y "Sometimes choice is enough to begin."
+
+    n "The first train arrives. You don't board it yet."
+    n "SOFT DAWN END — Chosen On Purpose"
+    call add_journal("Ending reached: Soft Dawn.")
+    jump epilogue_final
+
+label ending_clocktower_truth:
+    scene black
+    with dissolve
+
+    n "At Clocktower Hill, Akari hands you the sealed envelope."
+    a "The myth isn't about a catgirl appearing."
+    a "It's about people returning before it's too late."
+
+    n "Inside is a list of names, one per bloom season."
+    n "At the bottom, a blank line waits for this year."
+
+    y "The Neko Hour doesn't grant wishes."
+    y "It only gives one honest window."
+
+    menu:
+        "Write on the blank line?"
+
+        "Write both your names":
+            $ affinity += 1
+            $ honesty += 1
+            p "No more half-presence."
+            n "CLOCKTOWER TRUTH END — Dawn Contract"
+            call add_journal("Ending reached: Clocktower Truth (Dawn Contract).")
+
+        "Leave it blank":
+            $ courage -= 1
+            p "I'm not ready to promise."
+            n "CLOCKTOWER TRUTH END — Unfinished Line"
+            call add_journal("Ending reached: Clocktower Truth (Unfinished Line).")
+
+    jump epilogue_final
+
+label ending_moonlit_distance:
+    scene black
+    with dissolve
+
+    n "You stand in the station crowd while petals stick to wet concrete."
+    n "Yuna appears across the tracks, then turns before you can call her name."
+
+    if honesty <= 0:
+        n "You tell yourself timing was bad."
+        n "Your reflection knows better."
+    else:
+        n "You know exactly what you avoided."
+
+    n "MOONLIT DISTANCE END — Last Train Missed"
+    call add_journal("Ending reached: Moonlit Distance.")
+    jump epilogue_final
+
+label epilogue_final:
+    scene black
+    with fade
+
+    n "One week later."
+
+    if festival_outcome == "heart":
+        n "Sakura Alley feels smaller now, like a place that belongs to both of you."
+    elif festival_outcome == "mind":
+        n "The clocktower note appears again: 'Don't be late to your own heart.'"
+    else:
+        n "You still check the platform at midnight, pretending you're only passing by."
+
+    n "Route Summary:"
+    n "Affinity: [affinity] | Honesty: [honesty] | Courage: [courage] | Myth Clue: [myth_clue]"
+    n "Festival trajectory: [festival_outcome]"
+
+    n "Journal recap:"
+    python:
+        for i, entry in enumerate(journal, 1):
+            renpy.say(n, f"{i}. {entry}")
+
+    return
 
 label codex_preview:
     n "Route Summary:"
