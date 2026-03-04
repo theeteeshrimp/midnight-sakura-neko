@@ -16,6 +16,7 @@ default clue_last_train_story = False
 default chapter = 0
 
 default journal = []
+default festival_outcome = "none"
 
 label add_journal(entry):
     $ journal.append(entry)
@@ -403,6 +404,79 @@ label chapter_3_resolve:
         n "Distance is now a habit, not an accident."
 
     n "[Next: Chapter 4 — Festival Night Decision]"
+    jump chapter_4_festival
+
+label chapter_4_festival:
+    $ chapter = 4
+    scene black
+    with fade
+
+    n "Sakura Festival night. Lanterns ripple in the wind like breathing stars."
+    n "Crowds laugh, drums pulse, and every path in Hanamichi seems to lead to one person."
+
+    if route_flag == "romance":
+        n "Yuna waits near the torii where you promised not to be accidental."
+    else:
+        n "Yuna stands by the clocktower stairs, as if deciding whether to trust your questions."
+
+    y "Tonight matters. So don't give me a half-answer."
+
+    menu:
+        "Festival Night Decision"
+
+        "Choose Yuna openly (Heart path)":
+            $ affinity += 2
+            $ honesty += 1
+            $ courage += 1
+            $ festival_outcome = "heart"
+            p "No more drifting. I choose you, on purpose."
+            y "...then stay when it's difficult, not just when it's pretty."
+            call add_journal("Festival choice: chose Yuna openly and directly.")
+
+        "Choose the truth first (Mind path)":
+            $ myth_clue += 2
+            $ courage += 1
+            $ festival_outcome = "mind"
+            p "I need the full truth about the Neko Hour, even if it hurts."
+            y "Then hear it without hiding behind analysis."
+            call add_journal("Festival choice: prioritized unraveling the city's truth.")
+
+        "Hesitate and postpone":
+            $ affinity -= 2
+            $ honesty -= 1
+            $ courage -= 1
+            $ festival_outcome = "drift"
+            p "Can we... do this another night?"
+            y "You said that last time."
+            call add_journal("Festival choice: hesitated and postponed again.")
+
+    # trajectory setup scene
+    if festival_outcome == "heart":
+        n "Yuna takes your hand and leads you through the lantern gate."
+        n "For the first time, the city feels less like a puzzle and more like a place to live."
+    elif festival_outcome == "mind":
+        n "Akari appears with an old envelope stamped with the clocktower seal."
+        a "If you want answers, open this at dawn."
+        $ myth_clue += 1
+    else:
+        n "You watch the festival from the edge, present in body, absent in decision."
+
+    jump chapter_4_resolve
+
+label chapter_4_resolve:
+    scene black
+    with dissolve
+
+    n "Chapter 4 Complete."
+
+    if festival_outcome == "heart" and affinity >= 5:
+        n "Ending trajectory unlocked: Soft Dawn (Romance-forward)."
+    elif festival_outcome == "mind" and myth_clue >= 5:
+        n "Ending trajectory unlocked: Clocktower Truth (Mystery-forward)."
+    else:
+        n "Ending trajectory unlocked: Moonlit Distance (Drift risk)."
+
+    n "[Next: Chapter 5 — Dawn Resolution]"
     jump codex_preview
 
 label codex_preview:
@@ -418,6 +492,9 @@ label codex_preview:
         n "Current route mood: Sakura Alley (Romance)"
     elif route_flag == "mystery":
         n "Current route mood: Lantern District (Mystery)"
+
+    if festival_outcome != "none":
+        n "Festival trajectory: [festival_outcome]"
 
     n "Journal recap:"
     python:
