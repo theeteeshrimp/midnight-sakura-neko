@@ -28,11 +28,11 @@ label start:
     with fade
 
     n "Sakura petals drift through neon light like pink snow."
-    n "The final train sighs into Shiun Station... and you step out at the wrong stop."
+    n "The final train sighs into Shiun Station... and you step out one stop too far."
 
     p "Wait—this isn't my district."
 
-    n "A soft bell chimes. A girl with cat ears lands on the platform rail like it's nothing."
+    n "A soft bell chimes. A cat-eared girl lands on the platform rail like gravity is optional."
 
     y "Nyaa~ Lost traveler detected."
     p "Uh... did you just jump from up there?"
@@ -106,7 +106,7 @@ label chapter_1_clocktower:
 
     a "So you're this season's midnight pair."
     p "This season's what?"
-    a "Never mind. Tea?"
+    a "Never mind. Want tea?"
 
     menu:
         "How do you respond to Akari?"
@@ -182,7 +182,7 @@ label chapter_2_sakura_alley:
     with dissolve
 
     n "You follow Yuna through narrow lanes covered in petals and paper lights."
-    y "No masks tonight, okay?"
+    y "No masks tonight, okay? Just us."
 
     menu:
         "How honest are you with Yuna?"
@@ -207,7 +207,7 @@ label chapter_2_sakura_alley:
             call add_journal("In Sakura Alley, I dodged emotional honesty.")
 
     n "Yuna stops near an old torii wrapped in blossoms."
-    y "If we meet here next week, make sure it's not by accident."
+    y "If we meet here next week, make sure it isn't by accident."
 
     if honesty >= 2:
         $ courage += 1
@@ -346,7 +346,7 @@ label chapter_3_late:
         n "The charm reads: 'I wanted to trust tonight.'"
         $ affinity -= 1
     else:
-        n "The charm reads: 'Truth waits for no one.'"
+        n "The charm reads: 'Truth doesn't wait for anyone.'"
         $ myth_clue += 1
 
     menu:
@@ -486,7 +486,7 @@ label chapter_5_first_train_home:
 
     n "[Final Chapter: The First Train Home]"
     n "Dawn thins the night. Festival lights fade."
-    n "At Shiun Station, the first train hums in the distance."
+    n "At Shiun Station, the first train hums somewhere beyond the rain."
 
     if festival_outcome == "heart":
         jump ending_soft_dawn
@@ -575,7 +575,7 @@ label epilogue_final:
     elif festival_outcome == "mind":
         n "The clocktower note appears again: 'Don't be late to your own heart.'"
     else:
-        n "You still check the platform at midnight, pretending you're only passing by."
+        n "You still check the platform at midnight, pretending you're just passing by."
 
     n "Route Summary:"
     n "Affinity: [affinity] | Honesty: [honesty] | Courage: [courage] | Myth Clue: [myth_clue]"
