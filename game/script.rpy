@@ -154,7 +154,117 @@ label chapter_1_end:
     else:
         n "You leave with more questions than answers."
 
-    n "[Next: Chapter 2 — Sakura Alley / Lantern District split]"
+    n "[Chapter 2 begins now.]"
+    jump chapter_2_split
+
+label chapter_2_split:
+    $ chapter = 2
+    scene black
+    with fade
+
+    n "Night falls again. Lantern light blooms across Hanamichi City."
+    y "So? Follow your heart or your curiosity?"
+
+    menu:
+        "Choose tonight's route"
+
+        "Go with Yuna to Sakura Alley (Romance Route)":
+            $ route_flag = "romance"
+            jump chapter_2_sakura_alley
+
+        "Investigate Lantern District rumors (Mystery Route)":
+            $ route_flag = "mystery"
+            jump chapter_2_lantern_district
+
+label chapter_2_sakura_alley:
+    scene black
+    with dissolve
+
+    n "You follow Yuna through narrow lanes covered in petals and paper lights."
+    y "No masks tonight, okay?"
+
+    menu:
+        "How honest are you with Yuna?"
+
+        "Tell her you're scared of getting attached":
+            $ honesty += 2
+            $ affinity += 1
+            p "I keep pretending I'm fine alone. I'm not."
+            y "...good. Keep talking like that."
+            call add_journal("In Sakura Alley, I admitted my fear of attachment.")
+
+        "Flirt and keep things light":
+            $ affinity += 1
+            p "Maybe I'm only here because you look unfairly cute under lanterns."
+            y "Heh. Acceptable answer."
+            call add_journal("In Sakura Alley, I kept things playful with Yuna.")
+
+        "Deflect and joke":
+            $ honesty -= 1
+            p "I'm just collecting midnight side quests."
+            y "That's not what I asked."
+            call add_journal("In Sakura Alley, I dodged emotional honesty.")
+
+    n "Yuna stops near an old torii wrapped in blossoms."
+    y "If we meet here next week, make sure it's not by accident."
+
+    if honesty >= 2:
+        $ courage += 1
+        p "Then I'll choose it on purpose."
+        y "...okay."
+        call add_journal("I promised intention instead of coincidence.")
+
+    jump chapter_2_merge
+
+label chapter_2_lantern_district:
+    scene black
+    with dissolve
+
+    n "You head to Lantern District, where old shop signs sway in the wind."
+    n "Akari waits near a shuttered tea shop, like she expected you."
+
+    a "Looking for ghost stories, or your own reflection?"
+    p "Both, maybe."
+
+    menu:
+        "What lead do you chase?"
+
+        "The station archives about last-train sightings":
+            $ myth_clue += 2
+            $ courage += 1
+            n "You find repeated reports: same time, same sakura wind, same cat-eared witness."
+            call add_journal("Investigated station logs tied to Neko Hour sightings.")
+
+        "Interview stall owners about the clocktower note":
+            $ myth_clue += 1
+            $ honesty += 1
+            n "Three vendors confirm the same phrase appears every bloom season."
+            call add_journal("Cross-checked local stories about the clocktower note.")
+
+        "Follow Yuna from a distance":
+            $ myth_clue += 1
+            $ affinity -= 1
+            n "You lose her twice and feel worse when you finally spot her alone on a bridge."
+            call add_journal("Chose suspicion over trust while tracking Yuna.")
+
+    if myth_clue >= 3:
+        n "A pattern emerges: the Neko Hour appears around unresolved promises."
+        call add_journal("Connected Neko Hour events to unresolved promises.")
+
+    jump chapter_2_merge
+
+label chapter_2_merge:
+    scene black
+    with fade
+
+    n "Chapter 2 Complete."
+
+    if route_flag == "romance":
+        n "Route lock-in trend: Heart-first path."
+    elif route_flag == "mystery":
+        n "Route lock-in trend: Truth-first path."
+
+    n "[Next: Chapter 3 — Missed Meeting / Trust Fracture]"
     jump codex_preview
 
 label codex_preview:
@@ -165,6 +275,11 @@ label codex_preview:
         n "Clue unlocked: Repeating Clocktower Note"
     if clue_last_train_story:
         n "Clue unlocked: Last Train Story"
+
+    if route_flag == "romance":
+        n "Current route mood: Sakura Alley (Romance)"
+    elif route_flag == "mystery":
+        n "Current route mood: Lantern District (Mystery)"
 
     n "Journal recap:"
     python:
